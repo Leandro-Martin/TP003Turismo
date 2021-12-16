@@ -71,7 +71,12 @@
 								<a href="/turismo/users/delete.do?id=${tmp_user.id}"
 									class="btn btn-danger rounded" role="button"><i
 									class="bi bi-x-circle-fill"></i></a>
-							</c:if></td>
+							</c:if>
+							<c:if test="${user.admin}">
+									<a href="/turismo/users/itinerario.do?id=${tmp_user.id}"
+								class="btn btn-info rounded" role="button">Ver itinerario</a>
+							</c:if>
+							</td>
 					</tr>
 				</c:forEach>
 			</tbody>

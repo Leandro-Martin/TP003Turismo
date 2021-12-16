@@ -32,7 +32,17 @@ public class User {
 		this.coins -= attraction.getCost();
 		this.time -= attraction.getDuration();
 		try {
-			itinerarioDAO.insert(new Registro(this.getId(), attraction.getId(), 0));
+			itinerarioDAO.insert(new Registro(this.getId(), attraction.getId(), "atraccion"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addToItinerary(Promocion promocion) {
+		this.coins -= promocion.getPrecio();
+		this.time -= promocion.getDuracion();
+		try {
+			itinerarioDAO.insert(new Registro(this.getId(), promocion.getId(), "promocion"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -42,8 +52,16 @@ public class User {
 		return attraction.getCost() <= this.coins;
 	}
 
+	public boolean canAfford(Promocion promocion) {
+		return promocion.getPrecio() <= this.coins;
+	}
+
 	public boolean canAttend(Attraction attraction) {
 		return attraction.getDuration() <= this.time;
+	}
+
+	public boolean canAttend(Promocion promocion) {
+		return promocion.getDuracion() <= this.time;
 	}
 
 	public boolean checkPassword(String password) {

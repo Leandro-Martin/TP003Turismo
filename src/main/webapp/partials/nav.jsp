@@ -14,7 +14,7 @@
 					<a class="nav-link active" aria-current="page" href="/turismo/attractions/index.do">Atracciones</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link active" aria-current="page" href="/turismo/itinerario/index.do">Itinerario</a>
+					<a class="nav-link active" aria-current="page" href="/turismo/itinerario/index.do?id=${user.getId()}">Itinerario</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link active" aria-current="page" href="/turismo/promociones/index.do">Promociones</a>

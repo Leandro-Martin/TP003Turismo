@@ -11,4 +11,7 @@ public class ItinerarioService {
 		return DAOFactory.getItinerarioDAO().findAll();
 	}
 
+	public List<Registro> findByUserId(int id) {
+		return DAOFactory.getItinerarioDAO().getByUserId(id);
+	}
 }

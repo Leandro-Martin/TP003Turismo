@@ -34,7 +34,7 @@
 		<c:if test="${user.isAdmin()}">
 			<div class="mb-3">
 				<a href="/turismo/promociones/create.do" class="btn btn-primary"
-					role="button"> <i class="bi bi-plus-lg"></i> Nueva Promoción
+					role="button"> <i class="bi bi-plus-lg"></i> Nueva Promoción (WIP)
 				</a>
 			</div>
 		</c:if>

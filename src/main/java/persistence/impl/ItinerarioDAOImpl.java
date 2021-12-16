@@ -15,23 +15,33 @@ public class ItinerarioDAOImpl implements ItinerarioDAO {
 
 	@Override
 	public List<Registro> findAll() {
+		List<Registro> reg = new LinkedList<Registro>();
 		try {
-			String sql = "SELECT * FROM itinerario";
+			String sql = "SELECT * FROM itinerario WHERE promocion = 0";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
 			ResultSet resultados = statement.executeQuery();
 
-			List<Registro> reg = new LinkedList<Registro>();
 			while (resultados.next()) {
-				reg.add(new Registro(resultados.getInt("usuario_id"), resultados.getInt("atraccion_id"),
-						resultados.getInt("promocion_id")));
+				reg.add(new Registro(resultados.getInt("usuario_id"), resultados.getInt("id"), "atraccion"));
 			}
-
-			return reg;
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new MissingDataException(e);
 		}
+		try {
+			String sql = "SELECT * FROM itinerario WHERE promocion = 1";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			ResultSet resultados = statement.executeQuery();
+
+			while (resultados.next()) {
+				reg.add(new Registro(resultados.getInt("usuario_id"), resultados.getInt("id"), "promocion"));
+			}
+
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+		return reg;
 	}
 
 	@Override
@@ -40,24 +50,37 @@ public class ItinerarioDAOImpl implements ItinerarioDAO {
 		return null;
 	}
 
-	public List<Registro> findByUsuarioId(Integer usuarioId) {
+	@Override
+	public List<Registro> getByUserId(int id) {
+		List<Registro> reg = new LinkedList<Registro>();
 		try {
-			String sql = "SELECT * FROM itinerario WHERE usuario_id = ?";
+			String sql = "SELECT * FROM itinerario WHERE (usuario_id = ?) & (promocion = 0)";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setInt(1, usuarioId);
+			statement.setInt(1, id);
 			ResultSet resultados = statement.executeQuery();
 
-			List<Registro> reg = new LinkedList<Registro>();
 			while (resultados.next()) {
-				reg.add(new Registro(resultados.getInt("usuario_id"), resultados.getInt("atraccion_id"),
-						resultados.getInt("promocion_id")));
+				reg.add(new Registro(resultados.getInt("usuario_id"), resultados.getInt("id"), "atraccion"));
 			}
-
-			return reg;
 		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
+		try {
+			String sql = "SELECT * FROM itinerario WHERE (usuario_id = ?) & (promocion = 1)";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, id);
+			ResultSet resultados = statement.executeQuery();
+
+			while (resultados.next()) {
+				reg.add(new Registro(resultados.getInt("usuario_id"), resultados.getInt("id"), "promocion"));
+			}
+
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+		return reg;
 	}
 
 	@Override
@@ -80,14 +103,14 @@ public class ItinerarioDAOImpl implements ItinerarioDAO {
 	@Override
 	public int insert(Registro reg) {
 		try {
-			String sql = "INSERT INTO itinerario (usuario_id, atraccion_id, promocion_id) VALUES (?, ?, ?)";
+			String sql = "INSERT INTO itinerario (usuario_id, atraccion_id, promocion) VALUES (?, ?, ?)";
 			Connection conn = ConnectionProvider.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(sql);
 			int i = 1;
 			statement.setInt(i++, reg.getUsuarioId());
-			statement.setInt(i++, reg.getAtraccionId());
-			statement.setInt(i++, reg.getPromocionId());
+			statement.setInt(i++, reg.getId());
+			statement.setInt(i++, reg.esPromocion());
 			int rows = statement.executeUpdate();
 
 			return rows;

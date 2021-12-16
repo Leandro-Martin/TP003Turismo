@@ -32,9 +32,10 @@ public class Attraction {
 		this.duration = duration;
 	}
 
-	public Attraction(String name, Double duration) {
+	public Attraction(String name, Double duration, int cupos) {
 		this.name = name;
 		this.duration = duration;
+		this.capacity = cupos;
 	}
 
 	public boolean isValid() {
@@ -96,7 +97,7 @@ public class Attraction {
 	}
 
 	public Integer getCapacity() {
-		return capacity;
+		return this.capacity;
 	}
 
 	public void setCapacity(Integer capacity) {

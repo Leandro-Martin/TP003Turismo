@@ -32,6 +32,24 @@ public class AttractionDAOImpl implements AttractionDAO {
 		}
 	}
 
+	public List<Attraction> findAllNotRemoved() {
+		try {
+			String sql = "SELECT * FROM ATTRACTIONS WHERE removed = 0";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			ResultSet resultados = statement.executeQuery();
+
+			List<Attraction> attractions = new LinkedList<Attraction>();
+			while (resultados.next()) {
+				attractions.add(toAttraction(resultados));
+			}
+
+			return attractions;
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+	}
+
 	@Override
 	public Attraction find(Integer id) {
 		try {
@@ -39,7 +57,7 @@ public class AttractionDAOImpl implements AttractionDAO {
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setInt(1, id);
-			
+
 			ResultSet resultados = statement.executeQuery();
 
 			Attraction attraction = null;
@@ -52,7 +70,7 @@ public class AttractionDAOImpl implements AttractionDAO {
 			throw new MissingDataException(e);
 		}
 	}
-	
+
 	private Attraction toAttraction(ResultSet attractionRegister) throws SQLException {
 		return new Attraction(attractionRegister.getInt(1), attractionRegister.getString(2),
 				attractionRegister.getInt(3), attractionRegister.getDouble(4), attractionRegister.getInt(5));
@@ -102,7 +120,7 @@ public class AttractionDAOImpl implements AttractionDAO {
 	@Override
 	public int delete(Attraction attraction) {
 		try {
-			String sql = "DELETE FROM ATTRACTIONS WHERE ID = ?";
+			String sql = "UPDATE attractions SET removed = 1 WHERE ID = ?";
 			Connection conn = ConnectionProvider.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(sql);
@@ -131,7 +149,5 @@ public class AttractionDAOImpl implements AttractionDAO {
 			throw new MissingDataException(e);
 		}
 	}
-
-
 
 }

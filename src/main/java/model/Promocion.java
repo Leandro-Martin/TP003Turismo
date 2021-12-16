@@ -14,11 +14,12 @@ public class Promocion {
 	int id;
 	String nombre;
 	double descuento = 100;
-	double precio;
+	int precio;
 	double duracion;
+	int capacity;
 
-	List<Attraction> atraccionesPagas = new LinkedList<Attraction>();
-	List<Attraction> atraccionesGratis = new LinkedList<Attraction>();
+	public List<Attraction> atraccionesPagas = new LinkedList<Attraction>();
+	public List<Attraction> atraccionesGratis = new LinkedList<Attraction>();
 
 	public Promocion(ResultSet promo) {
 		try {
@@ -33,6 +34,12 @@ public class Promocion {
 
 		this.getAtracciones();
 		this.setPrecio();
+		this.setCupos();
+		this.setDuracion();
+	}
+	
+	public Promocion(int id) {
+		this.id = id;
 	}
 
 	public void getAtracciones() {
@@ -49,10 +56,10 @@ public class Promocion {
 			while (resultados.next()) {
 				if (resultados.getInt("gratis") == 0) {
 					this.atraccionesPagas.add(new Attraction(resultados.getString("name"), resultados.getInt("cost"),
-							resultados.getDouble("duration")));
+							resultados.getDouble("duration"), resultados.getInt("capacity")));
 				} else {
-					this.atraccionesGratis
-							.add(new Attraction(resultados.getString("name"), resultados.getDouble("duration")));
+					this.atraccionesGratis.add(new Attraction(resultados.getString("name"),
+							resultados.getDouble("duration"), resultados.getInt("capacity")));
 				}
 			}
 
@@ -63,18 +70,18 @@ public class Promocion {
 
 	public void setPrecio() {
 		// Si el precio de la promoción está definido entonces no necesita crear un
-		// precio a partir del precio de las atracciones..
+		// precio a partir del precio de las atracciones.
 		if (this.precio == 0) {
 			double costoTotal = 0;
 			for (Attraction attraction : atraccionesPagas) {
 				costoTotal += attraction.getCost();
 			}
 			costoTotal *= descuento / 100;
-			this.precio = costoTotal;
+			this.precio = (int) Math.ceil(costoTotal);
 		}
 	}
 
-	public double getPrecio() {
+	public int getPrecio() {
 		return this.precio;
 	}
 
@@ -87,8 +94,7 @@ public class Promocion {
 	}
 
 	public void setDuracion() {
-		// Si el precio de la promoción está definido entonces no necesita crear un
-		// precio a partir del precio de las atracciones..
+		// La duración de todas las atracciones a la vez.
 		double duracionTotal = 0;
 		for (Attraction attraction : atraccionesPagas) {
 			duracionTotal += attraction.getDuration();
@@ -106,6 +112,30 @@ public class Promocion {
 	}
 
 	public int getCupos() {
-		return 0;
+		return this.capacity;
 	}
+
+	public boolean canHost(int i) {
+		return this.capacity >= i;
+	}
+
+	public void setCupos() {
+		// Esto se basa en que no podes comprar todas las atracciones de una promoción
+		// si no hay cupos suficientes para cada una, así que la cantidad de cupos de la
+		// promoción es la menor cantidad de cupos que haya entre las atracciones.
+		int cupos = Integer.MAX_VALUE;
+		for (Attraction attraction : this.atraccionesPagas) {
+			cupos = Math.min(cupos, attraction.getCapacity());
+		}
+
+		for (Attraction attraction : this.atraccionesGratis) {
+			cupos = Math.min(cupos, attraction.getCapacity());
+		}
+		this.capacity = cupos;
+	}
+
+	public void host(int i) {
+		this.capacity -= 1;
+	}
+
 }

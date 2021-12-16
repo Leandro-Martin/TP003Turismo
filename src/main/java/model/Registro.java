@@ -10,20 +10,22 @@ import persistence.commons.MissingDataException;
 public class Registro {
 
 	int usuarioId;
-	int atraccionId;
-	int promocionId;
+	int id;
+	String tipo;
 	String usuarioNombre;
-	String atraccionNombre;
-	String promocionNombre;
+	String nombre;
 
-	public Registro(int usuarioId, int atraccionId, int promocionId) {
+	public Registro(int usuarioId, int id, String tipo) {
 		// TODO Auto-generated constructor stub
 		this.usuarioId = usuarioId;
-		this.atraccionId = atraccionId;
-		this.promocionId = promocionId;
+		this.id = id;
+		this.tipo = tipo;
 		setUsuarioNombre();
-		setAtraccionNombre();
-		setPromocionNombre();
+		if (tipo == "promocion") {
+			setNombrePromocion();
+		} else {
+			setNombreAtraccion();
+		}
 	}
 
 	public int getUsuarioId() {
@@ -50,40 +52,51 @@ public class Registro {
 		}
 	}
 
-	public int getAtraccionId() {
-		return atraccionId;
+	public int getId() {
+		return this.id;
 	}
 
-	public String getAtraccionNombre() {
-		return this.atraccionNombre;
+	public String getNombre() {
+		return this.nombre;
 	}
 
-	public void setAtraccionNombre() {
+	public void setNombreAtraccion() {
 		try {
 			String sql = "SELECT name FROM attractions WHERE id = ?";
 			Connection conn = ConnectionProvider.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setInt(1, this.getAtraccionId());
+			statement.setInt(1, this.getId());
 			ResultSet atraccion = statement.executeQuery();
 			if (atraccion.next()) {
-				this.atraccionNombre = atraccion.getString("name");
+				this.nombre = atraccion.getString("name");
 			}
 		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
 	}
 
-	public int getPromocionId() {
-		return promocionId;
+	public void setNombrePromocion() {
+		try {
+			String sql = "SELECT name FROM promociones WHERE id = ?";
+			Connection conn = ConnectionProvider.getConnection();
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, this.getId());
+			ResultSet atraccion = statement.executeQuery();
+			if (atraccion.next()) {
+				this.nombre = atraccion.getString("name");
+			}
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
 	}
 
 	public String getPromocionNombre() {
-		return null;
+		return this.nombre;
 	}
 
-	public void setPromocionNombre() {
-
+	public int esPromocion() {
+		return this.tipo == "promocion" ? 1 : 0;
 	}
-
 }

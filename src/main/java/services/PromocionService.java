@@ -3,6 +3,7 @@ package services;
 import java.util.List;
 
 import model.Promocion;
+import persistence.PromocionDAO;
 import persistence.commons.DAOFactory;
 
 public class PromocionService {
@@ -19,7 +20,10 @@ public class PromocionService {
 	}
 
 	public void delete(Integer id) {
+		Promocion promocion = new Promocion(id);
 
+		PromocionDAO promocionDAO = DAOFactory.getPromocionDAO();
+		promocionDAO.delete(promocion);
 	}
 
 	public Promocion find(Integer id) {

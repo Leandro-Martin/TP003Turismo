@@ -15,9 +15,9 @@ import services.ItinerarioService;
 /**
  * Servlet implementation class ListItinerarioServlet
  */
-@WebServlet("/itinerario/index.do")
+@WebServlet({ "/itinerario/index.do", "/users/itinerario.do" })
 public class ListItinerarioServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 983234019293814018L;
 	private ItinerarioService itinerarioService;
 
 	public void init() throws ServletException {
@@ -27,8 +27,10 @@ public class ListItinerarioServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		List<Registro> listItineario = itinerarioService.list();
-		request.setAttribute("listItinerario", listItineario);
+		Integer usuarioId = Integer.parseInt(request.getParameter("id"));
+
+		List<Registro> listItinerario = itinerarioService.findByUserId(usuarioId);
+		request.setAttribute("listItinerario", listItinerario);
 
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/itinerario/index.jsp");
 		dispatcher.forward(request, response);

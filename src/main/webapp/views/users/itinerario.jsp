@@ -40,11 +40,12 @@
 			</thead>
 			<tbody>
 				<c:forEach items="${listItinerario}" var="registro">
-					<tr>
+					<c:if test="${user.username == registro.getUsuarioNombre()}">
+						<tr>
 							<td><strong><c:out value="${registro.getUsuarioNombre()}"></c:out></strong>
 							<td><c:out value="${registro.getNombre()}"></c:out></td>
 						</tr>
-					
+					</c:if>
 				</c:forEach>
 			</tbody>
 		</table>

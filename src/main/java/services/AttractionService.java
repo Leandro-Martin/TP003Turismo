@@ -9,7 +9,7 @@ import persistence.commons.DAOFactory;
 public class AttractionService {
 
 	public List<Attraction> list() {
-		return DAOFactory.getAttractionDAO().findAll();
+		return DAOFactory.getAttractionDAO().findAllNotRemoved();
 	}
 
 	public Attraction create(String name, Integer cost, Double duration, Integer capacity) {

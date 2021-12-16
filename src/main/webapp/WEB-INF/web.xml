@@ -23,4 +23,34 @@
     <servlet-name>ListPromocionesServlet</servlet-name>
     <url-pattern>/ListPromocionesServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ComprarPromocionServlet</display-name>
+    <servlet-name>ComprarPromocionServlet</servlet-name>
+    <servlet-class>controller.promociones.ComprarPromocionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ComprarPromocionServlet</servlet-name>
+    <url-pattern>/ComprarPromocionServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeletePromotionServlet</display-name>
+    <servlet-name>DeletePromotionServlet</servlet-name>
+    <servlet-class>controller.promociones.DeletePromotionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeletePromotionServlet</servlet-name>
+    <url-pattern>/DeletePromotionServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>VerItinerario</display-name>
+    <servlet-name>VerItinerario</servlet-name>
+    <servlet-class>controller.users.VerItinerario</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VerItinerario</servlet-name>
+    <url-pattern>/VerItinerario</url-pattern>
+  </servlet-mapping>
 </web-app>
